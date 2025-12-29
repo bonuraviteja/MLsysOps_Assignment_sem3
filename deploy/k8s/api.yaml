@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heart-mlops-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: heart-mlops-api
+  template:
+    metadata:
+      labels:
+        app: heart-mlops-api
+    spec:
+      containers:
+        - name: api
+          image: heart-mlops:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MODEL_PATH
+              value: /app/artifacts/model/model.joblib
+          ports:
+            - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: heart-mlops-api
+spec:
+  selector:
+    app: heart-mlops-api
+  ports:
+    - port: 80
+      targetPort: 8000
+  type: LoadBalancer
