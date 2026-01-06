@@ -26,6 +26,8 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
           python -m pip install -e .
+          python -c "import sys; print('Python paths:'); print('\n'.join(sys.path))"
+          python -c "import heart_disease_mlops; print('Package installed:', heart_disease_mlops.__version__)"
 
       - name: Lint
         run: |
