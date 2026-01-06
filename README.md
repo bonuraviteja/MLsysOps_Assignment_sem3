@@ -9,20 +9,62 @@ This repository implements the complete assignment requirements end-to-end:
 - Request logging + Prometheus metrics
 - CI pipeline (lint, unit tests, train)
 
+## Quickstart (copy/paste)
+
+```powershell
+cd "C:\Users\lakshmi.prasanna\OneDrive - insightsoftware\Documents\ravi_teja\MLsysOps_Assignment_sem3"
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+& .\.venv\Scripts\Activate.ps1
+
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m pip install -e .
+
+python -m heart_disease_mlops.pipeline run --quick
+
+./scripts/start_api.ps1
+```
+
 ## 1) Setup (Windows PowerShell)
+
+Step-by-step:
+
+1) Create + activate a virtual environment
 
 ```powershell
 python -m venv .venv
 & .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
-pip install -r requirements.txt
-pip install -e .
+python -m pip install -r requirements.txt
+python -m pip install -e .
 ```
 
-## 2) Run the full pipeline locally
+If activation fails due to execution policy, run this once per terminal and retry:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+& .\.venv\Scripts\Activate.ps1
+```
+
+## 2) Run the pipeline locally
+
+2) Run the full pipeline:
 
 ```powershell
 python -m heart_disease_mlops.pipeline run
+```
+
+Or run the quick pipeline (used by CI):
+
+```powershell
+python -m heart_disease_mlops.pipeline run --quick
+```
+
+You can also use the helper script:
+
+```powershell
+./scripts/run_pipeline.ps1
+./scripts/run_pipeline.ps1 -Quick
 ```
 
 If your network intercepts TLS (common on corporate networks) and UCI download fails, try:
@@ -50,15 +92,23 @@ mlflow ui --backend-store-uri "file:$(Resolve-Path artifacts/mlruns)" --port 500
 
 ## 4) Run the API locally (no Docker)
 
+3) Ensure a trained model exists (run the pipeline first), then start the API:
+
 ```powershell
 $env:MODEL_PATH = "$(Resolve-Path artifacts/model/model.joblib)"
-uvicorn heart_disease_mlops.serving.app:app --host 0.0.0.0 --port 8000
+python -m uvicorn heart_disease_mlops.serving.app:app --host 0.0.0.0 --port 8000
+```
+
+Or use the helper script (runs `--quick` training if the model is missing):
+
+```powershell
+./scripts/start_api.ps1
 ```
 
 If port `8000` is already in use, run on `8001`:
 
 ```powershell
-uvicorn heart_disease_mlops.serving.app:app --host 0.0.0.0 --port 8001
+python -m uvicorn heart_disease_mlops.serving.app:app --host 0.0.0.0 --port 8001
 ```
 
 In a separate PowerShell terminal (leave Uvicorn running):
@@ -108,8 +158,8 @@ Grafana: `http://localhost:3000` (default login: `admin` / `admin`)
 ## 8) Tests + Lint
 
 ```powershell
-ruff check .
-pytest
+python -m ruff check .
+python -m pytest
 ```
 
 ## Deliverables placeholders
