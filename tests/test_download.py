@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from src.heart_disease_mlops.data.download import download_uci_dataset
+from heart_disease_mlops.data.download import download_uci_dataset
 
 
 class _FakeResp:
