@@ -13,7 +13,7 @@ jobs:
         python-version: ["3.12"]
     runs-on: ${{ matrix.os }}
     env:
-      PYTHONPATH: src
+      PYTHONPATH: ${{ github.workspace }}/src
     steps:
       - uses: actions/checkout@v4
 
@@ -28,6 +28,7 @@ jobs:
           python -m pip install -e .
           python -c "import sys; print('Python paths:'); print('\n'.join(sys.path))"
           python -c "import heart_disease_mlops; print('Package installed:', heart_disease_mlops.__version__)"
+          python -c "import heart_disease_mlops, importlib; print('Imported from:', heart_disease_mlops.__file__); m=importlib.import_module('heart_disease_mlops.data'); print('Subpackage ok:', m.__file__)"
 
       - name: Lint
         run: |

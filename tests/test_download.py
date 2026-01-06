@@ -18,7 +18,7 @@ def test_download_uci_dataset_normalizes(tmp_path, monkeypatch) -> None:
         b"67.0,1.0,2.0,160.0,286.0,0.0,0.0,108.0,1.0,1.5,1.0,3.0,2.0,2\n"
     )
 
-    import src.heart_disease_mlops.data.download as dl
+    import heart_disease_mlops.data.download as dl
 
     def fake_get(url: str, timeout: int):
         return _FakeResp(sample)
