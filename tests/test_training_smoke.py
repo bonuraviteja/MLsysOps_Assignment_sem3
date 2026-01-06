@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from heart_disease_mlops.training import train_and_select
+from src.heart_disease_mlops.training import train_and_select
 
 
 def test_train_and_select_smoke(tmp_path, monkeypatch) -> None:
